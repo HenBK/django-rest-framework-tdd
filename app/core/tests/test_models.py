@@ -23,3 +23,22 @@ class ModelTests(TestCase):
         user = get_user_model().objects.create_user(email, password='123456')
 
         self.assertEqual(user.email, email.lower())
+
+    def test_new_user_with_none_email(self):
+        """Tests that the user creation fails if the email provided is None"""
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user(None, password='123456')
+
+    def test_new_superuser_creation(self):
+        """
+        Tests that the fields is_staff and is_superuser are set to True when
+        creating a new superuser from the command line
+        """
+
+        superuser = get_user_model().objects.create_superuser(
+            'henrique.kubenda@gmail.com',
+            '123456',
+        )
+
+        self.assertTrue(superuser.is_staff)
+        self.assertTrue(superuser.is_superuser)
